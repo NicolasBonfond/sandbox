@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title "recettec : " ~ slug | upper %}
+{% block title "recette : " ~ recipe.title  %}
 {% block body %}
-{{ slug }} - {{ id }}
+    <h1>Recette : {{ recipe.title | upper }}</h1>
+    <p>Contenu de la recette : {{ recipe.content | nl2br }}</p>
 {% endblock %}

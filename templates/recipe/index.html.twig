@@ -5,8 +5,10 @@
     Je suis un template pour les recettes !
 
     <ul>
+    {% for recipe in recipes %}
         <li>
-            <a href="{{ url('recipe.show', {'id': '32', 'slug': 'pate-bolognaise'}) }}">Pâtes Bolognaises</a>
+            <a href="{{ url('recipe.show', {'id': recipe.id, 'slug': recipe.slug}) }}">{{ recipe.Title }}</a>
         </li>
+    {% endfor %}    
     </ul>
 {% endblock %}
