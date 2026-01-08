@@ -57,5 +57,20 @@ final class RecipeController extends AbstractController
             'recipe' => $recipes,
         ]);
     }
+
+    #[Route('/recette/{id}/edit', name :'recipe.edit', requirements: ['id' => '\d+'])]
+    public function edit(Request $request, int $id, RecipesRepository $repository): Response
+    {
+        $recipes = $repository->find($id);
+        return new JsonResponse([
+            'id' => $recipes->getId(),
+            'title' => $recipes->getTitle(),
+            'slug' => $recipes->getSlug(),
+            'content' => $recipes->getContent(),
+            'duration' => $recipes->getDuration(),
+            'createdAt' => $recipes->getCreatedAt()->format('Y-m-d H:i:s'),
+            'updatedAt' => $recipes->getUpdatedAt()->format('Y-m-d H:i:s'),
+        ]);
+    }
 }
 
