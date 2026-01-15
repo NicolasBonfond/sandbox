@@ -1,0 +1,17 @@
+{%extends 'base.html.twig' %}
+
+{%block title "Tableau de bord de la recette : " ~ recipe.title %}
+{%block body %}
+    <h1>Édition de la recette : {{ recipe.title | upper }}</h1>
+    <form method="post" action="">
+        <div>
+            <label for="title">Titre :</label>
+            <input type="text" id="title" name="title" value="{{ recipe.title }}">
+        </div>
+        <div>
+            <label for="content">Contenu :</label>
+            <textarea id="content" name="content">{{ recipe.content }}</textarea>
+        </div>
+        <button type="submit">Enregistrer les modifications</button>
+    </form>
+{% endblock %}

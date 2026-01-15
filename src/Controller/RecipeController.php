@@ -62,14 +62,8 @@ final class RecipeController extends AbstractController
     public function edit(Request $request, int $id, RecipesRepository $repository): Response
     {
         $recipes = $repository->find($id);
-        return new JsonResponse([
-            'id' => $recipes->getId(),
-            'title' => $recipes->getTitle(),
-            'slug' => $recipes->getSlug(),
-            'content' => $recipes->getContent(),
-            'duration' => $recipes->getDuration(),
-            'createdAt' => $recipes->getCreatedAt()->format('Y-m-d H:i:s'),
-            'updatedAt' => $recipes->getUpdatedAt()->format('Y-m-d H:i:s'),
+        return $this->render('recipe/edit.html.twig', [
+            'recipe' => $recipes,
         ]);
     }
 }
