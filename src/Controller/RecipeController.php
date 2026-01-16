@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\RecipesRepository;
+use App\Form\RecipeType;
 use App\Entity\Recipes;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +19,7 @@ final class RecipeController extends AbstractController
     public function index(Request $request, RecipesRepository $repository): Response
     {
 
-        $recipes = $repository->findWithDurationLowerThan(40);
+        $recipes = $repository->findWithDurationLowerThan(100);
 /*
 //creation d'une recette exemple, attention bien ajouter entity manager interface dans les parametres de la fonction
         $recipe = new Recipes();
@@ -59,12 +60,44 @@ final class RecipeController extends AbstractController
     }
 
     #[Route('/recette/{id}/edit', name :'recipe.edit', requirements: ['id' => '\d+'])]
-    public function edit(Request $request, int $id, RecipesRepository $repository): Response
+    public function edit(Recipes $recipes, Request $request, EntityManagerInterface $em)
     {
-        $recipes = $repository->find($id);
+        $form = $this->createForm(RecipeType::class, $recipes);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $recipes->setUpdatedAt(new \DateTimeImmutable());
+            $em->flush();
+            $this->addFlash('success', 'La recette a bien été modifiée !');
+            return $this->redirectToRoute('recipe.index');
+        }
+
         return $this->render('recipe/edit.html.twig', [
             'recipe' => $recipes,
+            'form' => $form,
         ]);
     }
+
+    #[Route('/recette/create', name:'recipe.create')]
+    public function create(Request $request, EntityManagerInterface $em)
+    {
+
+        $recipes = new Recipes();
+        $form = $this->createForm(RecipeType::class, $recipes);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $recipes->setCreatedAt(new \DateTimeImmutable())
+                    ->setUpdatedAt(new \DateTimeImmutable());
+            $em->persist($recipes);
+            $em->flush();
+            $this->addFlash('success', 'La recette a bien été créée !');
+            return $this->redirectToRoute('recipe.index');
+        }
+
+        return $this->render('recipe/create.html.twig', [
+            'form' => $form
+        ]);
+    }
+
+
 }
 

@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title "Nouvelle recette" %}
+
+{%block body %}
+    {{ form(form)}}
+    <div>
+        <a class="btn btn-primary" href="{{ url('recipe.index') }}">Retour</a>
+    </div>
+{% endblock %}
