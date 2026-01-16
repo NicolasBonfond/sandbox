@@ -2,15 +2,28 @@
 
 {% block title "Listes des recettes" %}
 {% block body %}
-    Je suis un template pour les recettes !
+    <h1>Liste des recettes</h1>
 
-    <ul>
-    {% for recipe in recipes %}
-        <li>
-            <a href="{{ url('recipe.show', {'id': recipe.id, 'slug': recipe.slug}) }}">{{ recipe.title }}</a>
-        </li>
-    {% endfor %}    
-    </ul>
+    <table class="table">
+        <thead>
+            <tr>
+                <th> Recettes </th>
+                <th> Actions </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for recipe in recipes %}
+                <tr>
+                    <td> {{ recipe.title }} </td>
+                    <td>
+                        <a class="btn btn-primary" href="{{ url('recipe.show', {'id': recipe.id, 'slug': recipe.slug}) }}">Voir</a>
+                        <a class="btn btn-secondary" href="{{ url('recipe.edit', {'id': recipe.id}) }}">Éditer</a>
+                        <a class="btn btn-danger" href="{{ url('recipe.delete', {'id': recipe.id}) }}">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     <div>
         <a class="btn btn-primary" href="{{ url('recipe.create') }}">Créer une nouvelle recette</a>
     </div>
