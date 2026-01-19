@@ -16,9 +16,15 @@
                 <tr>
                     <td> {{ recipe.title }} </td>
                     <td>
-                        <a class="btn btn-primary" href="{{ url('recipe.show', {'id': recipe.id, 'slug': recipe.slug}) }}">Voir</a>
-                        <a class="btn btn-secondary" href="{{ url('recipe.edit', {'id': recipe.id}) }}">Éditer</a>
-                        <a class="btn btn-danger" href="{{ url('recipe.delete', {'id': recipe.id}) }}">Supprimer</a>
+                        <div class="d-flex gap-2">
+                            <a class="btn btn-primary" href="{{ url('recipe.show', {'id': recipe.id, 'slug': recipe.slug}) }}">Voir</a>
+                            <a class="btn btn-secondary" href="{{ url('recipe.edit', {'id': recipe.id}) }}">Éditer</a>
+                            {# Permet d'éviter que le lien d'action ne supprime pas directement la recette #}
+                            <form action="{{ path('recipe.delete', {id: recipe.id}) }}" method="post">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             {% endfor %}

@@ -22,7 +22,23 @@ class RecipeType extends AbstractType
             ->add('save', SubmitType::class,
                 ['label' => 'Enregistrer']
             )
+            ->addEventListener(
+                FormEvents::PRE_SUBMIT,
+                $this->autoSlug(...)
+                )
         ;
+    }
+
+    // fonction qui permet de generer un slug automatiquement si le champ est vide
+    public function autoSlug(PreSubmitEvent $event): void {
+       $event->getData();
+       if (empty($data['slug'])) {
+            $slugger = new AsciiSlugger();
+            $data['slug'] = strToLower($slugger->slug($data['title']));
+            $event->setData($data);
+
+       }
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void
