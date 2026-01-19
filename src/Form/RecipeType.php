@@ -26,6 +26,10 @@ class RecipeType extends AbstractType
                 FormEvents::PRE_SUBMIT,
                 $this->autoSlug(...)
                 )
+            ->addEventListener(
+                FormEvents::POST_SUBMIT,
+                $this->autoTimestamps(...)
+                )   
         ;
     }
 
@@ -39,6 +43,12 @@ class RecipeType extends AbstractType
 
        }
 
+    }
+
+    // fonction qui met a jour les timestamps de creation et de modification
+    public function autoTimestamps(PostSubmitEvent $event): void {
+        $event->getData();
+        
     }
 
     public function configureOptions(OptionsResolver $resolver): void
