@@ -19,7 +19,7 @@ final class RecipeController extends AbstractController
     public function index(Request $request, RecipesRepository $repository): Response
     {
 
-        $recipes = $repository->findWithDurationLowerThan(100);
+        $recipes = $repository->findWithDurationLowerThan(360);
 /*
 //creation d'une recette exemple, attention bien ajouter entity manager interface dans les parametres de la fonction
         $recipe = new Recipes();
@@ -65,7 +65,6 @@ final class RecipeController extends AbstractController
         $form = $this->createForm(RecipeType::class, $recipes);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $recipes->setUpdatedAt(new \DateTimeImmutable());
             $em->flush();
             $this->addFlash('success', 'La recette a bien été modifiée !');
             return $this->redirectToRoute('recipe.index');
@@ -85,8 +84,6 @@ final class RecipeController extends AbstractController
         $form = $this->createForm(RecipeType::class, $recipes);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $recipes->setCreatedAt(new \DateTimeImmutable())
-                    ->setUpdatedAt(new \DateTimeImmutable());
             $em->persist($recipes);
             $em->flush();
             $this->addFlash('success', 'La recette a bien été créée !');

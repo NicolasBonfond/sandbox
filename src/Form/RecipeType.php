@@ -9,6 +9,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\Event\PreSubmitEvent;
+use Symfony\Component\Form\Event\PostSubmitEvent;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class RecipeType extends AbstractType
 {
@@ -35,7 +41,7 @@ class RecipeType extends AbstractType
 
     // fonction qui permet de generer un slug automatiquement si le champ est vide
     public function autoSlug(PreSubmitEvent $event): void {
-       $event->getData();
+       $data = $event->getData();
        if (empty($data['slug'])) {
             $slugger = new AsciiSlugger();
             $data['slug'] = strToLower($slugger->slug($data['title']));
@@ -47,8 +53,16 @@ class RecipeType extends AbstractType
 
     // fonction qui met a jour les timestamps de creation et de modification
     public function autoTimestamps(PostSubmitEvent $event): void {
-        $event->getData();
-        
+        $data = $event->getData();
+        $now = new \DateTimeImmutable();
+
+        if ($data->getCreatedAt() === null) {
+            $data->setCreatedAt($now);
+            $data->setUpdatedAt($now);
+
+        } else {
+            $data->setUpdatedAt($now);
+        }   
     }
 
     public function configureOptions(OptionsResolver $resolver): void
